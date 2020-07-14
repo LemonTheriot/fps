@@ -9,10 +9,6 @@ public class movement : MonoBehaviour
     public float jumpforce = 30f;
 
     private Rigidbody rb;
-
-    public float maxspeed = .6f;
-
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -38,9 +34,8 @@ public class movement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.S))
         {
+            transform.position += -transform.forward * movespeed;
 
-            //transform.position += -transform.forward * movespeed;
-            
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
