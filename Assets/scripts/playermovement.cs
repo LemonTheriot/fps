@@ -20,6 +20,8 @@ public class playermovement : MonoBehaviour
     public float jumpheight = 10f;
     private float distToGround;
 
+    public GameObject bulletPrefab;
+
     private void Start()
     {
         distToGround = GetComponent<Collider>().bounds.extents.y;
@@ -51,6 +53,8 @@ public class playermovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
     }
+
+  
 
     bool isGrounded()
     {
