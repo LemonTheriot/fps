@@ -8,10 +8,13 @@ public class gun : MonoBehaviour
     public float damage = 10f;
     public float range = 100f;
     public float impactForce = 30f;
+    public float fireRate = 15f;
 
     public Camera fpsCam;
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
+
+    private float NextTimeToFire = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -21,9 +24,13 @@ public class gun : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if (Input.GetButtonDown("Fire1"))
+    { 
+    
+        if (Input.GetButton("Fire1") && Time.time >= NextTimeToFire)
         {
+            
+            NextTimeToFire = Time.time + 1f / fireRate;
+
             shoot();
         }
         
