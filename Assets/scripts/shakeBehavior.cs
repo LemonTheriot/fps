@@ -55,7 +55,6 @@ public class shakeBehavior : MonoBehaviour
                     nextTimeToFire = Time.time + 1f / bb.akRef.fireRate;
 
                     Triggershake();
-
                     break;
 
                 case 1:
@@ -70,10 +69,12 @@ public class shakeBehavior : MonoBehaviour
 
                     Triggershake();
                     break;
+                default:
+                    break;
             }
         }
 
-        if(shakeDuration > 0)
+        if (shakeDuration > 0)
         {
             transform.localPosition = initialPos + Random.insideUnitSphere * shakeMagnitude;
 

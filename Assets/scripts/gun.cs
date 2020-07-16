@@ -78,7 +78,7 @@ public class gun : MonoBehaviour
             
         }
 
-        ammoDisplay.text = ammo.ToString();
+        ammoDisplay.text = (ammo.ToString() + "/" + maxAmmo);
 
 
     }
@@ -133,7 +133,7 @@ public class gun : MonoBehaviour
 
         currentAmmo--;
         ammo--;
-        
+
 
         RaycastHit hit;
 
