@@ -5,7 +5,7 @@ using UnityEngine;
 public class shakeBehavior : MonoBehaviour
 {
 
-    private Transform transform;
+    private Transform transForm;
 
     private float shakeDuration = 0f;
 
@@ -26,9 +26,9 @@ public class shakeBehavior : MonoBehaviour
 
     void Awake()
     {
-        if(transform == null)
+        if(transForm == null)
         {
-            transform = GetComponent(typeof(Transform)) as Transform;
+            transForm = GetComponent(typeof(Transform)) as Transform;
         }
 
     }

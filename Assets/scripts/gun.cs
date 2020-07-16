@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class gun : MonoBehaviour
@@ -14,7 +15,7 @@ public class gun : MonoBehaviour
     public Camera fpsCam;
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
-    public Animator shootAnim;
+    public Animator animator;
 
     private float NextTimeToFire = 0f;
 
@@ -27,6 +28,8 @@ public class gun : MonoBehaviour
     private int currentAmmo;
     public float reloadTime = 1f;
     private bool isReloading = false;
+    public int ammo;
+    public Text ammoDisplay;
 
     //public GameObject bulletPrefab;
 
@@ -34,15 +37,30 @@ public class gun : MonoBehaviour
     void Start()
     {
         currentAmmo = maxAmmo;
+        ammo = maxAmmo;
+    
+    }
+
+    private void OnEnable()
+    {
+        isReloading = false;
+        animator.SetBool("Reloading", false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+
         if (isReloading) 
             return;
 
         isShooting = false;
+
+        if (Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo)
+        {
+            StartCoroutine(Reload());
+        }
 
         if(currentAmmo <= 0)
         {
@@ -56,10 +74,11 @@ public class gun : MonoBehaviour
             NextTimeToFire = Time.time + 1f / fireRate;
 
             shoot();
-            //shootAnim.SetTrigger("shoot");
-        }
-        
 
+            
+        }
+
+        ammoDisplay.text = ammo.ToString();
 
 
     }
@@ -74,9 +93,15 @@ public class gun : MonoBehaviour
         isReloading = true;
         Debug.Log("Reloading...");
 
-        yield return new WaitForSeconds(reloadTime);
+        animator.SetBool("Reloading", true);
+
+        yield return new WaitForSeconds(reloadTime - .25f);
+        animator.SetBool("Reloading", false);
+        yield return new WaitForSeconds(.25f);
+
 
         currentAmmo = maxAmmo;
+        ammo = maxAmmo;
         isReloading = false;
 
     }
@@ -107,6 +132,7 @@ public class gun : MonoBehaviour
         muzzleFlash.Play();
 
         currentAmmo--;
+        ammo--;
         
 
         RaycastHit hit;
