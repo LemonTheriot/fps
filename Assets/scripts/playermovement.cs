@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class playermovement : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class playermovement : MonoBehaviour
     public CharacterController controller;
 
     public float speed = 12f;
+
+    public float speeed;
 
     Vector3 velocity;
 
@@ -19,17 +22,56 @@ public class playermovement : MonoBehaviour
     public LayerMask groundMask;
     public float jumpheight = 10f;
     private float distToGround;
+    public float sprintSpeed = 0.5f;
 
     public GameObject bulletPrefab;
+
+    public float health = 100f;
+        
+    CharacterController characterCollider;
+
+    public float crouchHeight = 2f;
+
+    public float regHeight = 4f;
+
 
     private void Start()
     {
         distToGround = GetComponent<Collider>().bounds.extents.y;
-       
+
+        characterCollider = gameObject.GetComponent<CharacterController>();
+
+        speeed = speed;
+
+        
     }
+
+
     // Update is called once per frame
     void FixedUpdate()
     {
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            characterCollider.height = crouchHeight;
+        }
+
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            characterCollider.height = regHeight;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = speeed * sprintSpeed;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = speeed;
+        }
+
+
 
         if (isGrounded() && velocity.y < 0)
         {
@@ -54,10 +96,24 @@ public class playermovement : MonoBehaviour
 
     }
 
-  
 
     bool isGrounded()
     {
         return Physics.Raycast(transform.position, -Vector3.up, distToGround + .3f);
     }
+
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+        if (health <= 0f)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        SceneManager.LoadScene(0);
+    }
+
 }

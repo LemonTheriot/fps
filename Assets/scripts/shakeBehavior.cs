@@ -9,10 +9,10 @@ public class shakeBehavior : MonoBehaviour
 
     private float shakeDuration = 0f;
 
-    private float shakeMagnitude = 0.3f;
+    public float shakeMagnitude = 0.3f;
 
 
-    private float dampingSpeed = .5f;
+    public float dampingSpeed = .5f;
 
     Vector3 initialPos;
 

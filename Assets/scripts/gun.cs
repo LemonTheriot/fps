@@ -31,6 +31,7 @@ public class gun : MonoBehaviour
     public int ammo;
     public Text ammoDisplay;
 
+
     //public GameObject bulletPrefab;
 
     // Start is called before the first frame update
@@ -156,4 +157,6 @@ public class gun : MonoBehaviour
             Destroy(impactGO, 2f);
         }
     }
+
+
 }
