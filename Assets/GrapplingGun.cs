@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GrapplingGun : MonoBehaviour
 {
 
     private LineRenderer lr;
     private Vector3 grapplePoint;
-    public LayerMask whatIsGrappleable;
     public Transform gunTip, camerapos, player;
     public float maxDistance;
     private SpringJoint joint;
@@ -19,16 +19,21 @@ public class GrapplingGun : MonoBehaviour
     [SerializeField] private float desiredDampeningValue = 7f;
     [SerializeField] private float desiredMassScale = 4.5f;
 
+    private int groundMask;
+
+    private List<SpringJoint> listSpringJoints = new List<SpringJoint>();
+
 
 
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
+        groundMask = LayerMask.GetMask("ground");
     }
 
     private void Update()
     {
-        DrawRope();
+        
         if (Input.GetMouseButtonDown(0))
         {
             
@@ -40,14 +45,20 @@ public class GrapplingGun : MonoBehaviour
         {
             StopGrapple();
         }
+
     }
 
-    
+    void LateUpdate()
+    {
+        DrawRope();
+    }
+
+
 
     private void StartGrapple()
     {
         RaycastHit hit;
-        if(Physics.Raycast(camerapos.position, camerapos.forward, out hit, maxDistance))
+        if(Physics.Raycast(camerapos.position, camerapos.forward, out hit, maxDistance, groundMask))
         {
             grapplePoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
@@ -62,11 +73,17 @@ public class GrapplingGun : MonoBehaviour
             joint.spring = desiredSpringValue;
             joint.damper = desiredDampeningValue;
             joint.massScale = desiredMassScale;
+
+            listSpringJoints.Add(joint);
+
+            lr.positionCount = 2;
         }
 
     }
     void DrawRope()
     {
+        if (!joint) return;
+
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, grapplePoint);
 
@@ -74,6 +91,22 @@ public class GrapplingGun : MonoBehaviour
 
     private void StopGrapple()
     {
+        lr.positionCount = 0;
+        Destroy(joint);
 
+        foreach (SpringJoint j in listSpringJoints)
+            Destroy(j);
+
+      
+    }
+
+    public bool IsGrappling()
+    {
+        return joint != null;
+    }
+
+    public Vector3 GetGrapplingPoint()
+    {
+        return grapplePoint;
     }
 }
